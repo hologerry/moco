@@ -196,6 +196,8 @@ def main_worker(gpu, ngpus_per_node, args):
                                 momentum=args.momentum,
                                 weight_decay=args.weight_decay)
 
+    experiment_dir = os.path.join('experiments', 'moco')
+    os.makedirs(experiment_dir, exist_ok=True)
     # optionally resume from a checkpoint
     if args.resume:
         if os.path.isfile(args.resume):
@@ -267,12 +269,13 @@ def main_worker(gpu, ngpus_per_node, args):
 
         if not args.multiprocessing_distributed or (args.multiprocessing_distributed
                 and args.rank % ngpus_per_node == 0):
+            save_path = os.path.join(experiment_dir, f'checkpoint_{epoch:04d}.pth')
             save_checkpoint({
                 'epoch': epoch + 1,
                 'arch': args.arch,
                 'state_dict': model.state_dict(),
                 'optimizer' : optimizer.state_dict(),
-            }, is_best=False, filename='experiments/moco/checkpoint_{:04d}.pth'.format(epoch))
+            }, is_best=False, experiment_dir=experiment_dir, filename=save_path)
 
 
 def train(train_loader, model, criterion, optimizer, epoch, args):
@@ -322,10 +325,11 @@ def train(train_loader, model, criterion, optimizer, epoch, args):
             progress.display(i)
 
 
-def save_checkpoint(state, is_best, filename='checkpoint.pth'):
+def save_checkpoint(state, is_best, experiment_dir, filename='checkpoint.pth'):
     torch.save(state, filename)
     if is_best:
-        shutil.copyfile(filename, 'experiments/moco/model_best.pth')
+        best_path = os.path.join(experiment_dir, f'model_best.pth')
+        shutil.copyfile(filename, best_path)
 
 
 class AverageMeter(object):
