@@ -58,7 +58,9 @@ parser.add_argument('--pretrained', dest='pretrained', action='store_true',
                     help='use pre-trained model')
 parser.add_argument('--world-size', default=1, type=int,
                     help='number of nodes for distributed training')
-parser.add_argument('--rank', default=0, type=int,
+parser.add_argument('--rank', default=-1, type=int,
+                    help='node rank for distributed training')
+parser.add_argument('--local_rank', default=-1, type=int,
                     help='node rank for distributed training')
 parser.add_argument('--dist-url', default='env://', type=str,
                     help='url used to set up distributed training')
