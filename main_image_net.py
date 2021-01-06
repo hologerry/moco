@@ -170,7 +170,7 @@ def main_worker(gpu, ngpus_per_node, args):
             model.cuda()
         else:
             model = torch.nn.DataParallel(model).cuda()
-
+    print("Prepared before optimizer")
     # define loss function (criterion) and optimizer
     criterion = nn.CrossEntropyLoss().cuda(args.gpu)
 
@@ -199,7 +199,7 @@ def main_worker(gpu, ngpus_per_node, args):
                   .format(args.resume, checkpoint['epoch']))
         else:
             print("=> no checkpoint found at '{}'".format(args.resume))
-
+    print("Prepared basic")
     cudnn.benchmark = True
 
     # Data loading code
@@ -239,7 +239,7 @@ def main_worker(gpu, ngpus_per_node, args):
     if args.evaluate:
         validate(val_loader, model, criterion, args)
         return
-
+    print("Prepared dataset")
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             train_sampler.set_epoch(epoch)
