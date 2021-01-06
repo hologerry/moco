@@ -60,9 +60,11 @@ parser.add_argument('--world-size', default=1, type=int,
                     help='number of nodes for distributed training')
 parser.add_argument('--rank', default=-1, type=int,
                     help='node rank for distributed training')
-parser.add_argument('--local_rank', default=-1, type=int,
-                    help='node rank for distributed training')
-parser.add_argument('--dist-url', default='env://', type=str,
+# parser.add_argument('--local_rank', default=-1, type=int,
+#                     help='node rank for distributed training')
+# parser.add_argument('--dist-url', default='env://', type=str,
+#                     help='url used to set up distributed training')
+parser.add_argument('--dist-url', default='tcp://localhost:28652', type=str,
                     help='url used to set up distributed training')
 parser.add_argument('--dist-backend', default='nccl', type=str,
                     help='distributed backend')
@@ -265,6 +267,7 @@ def main_worker(gpu, ngpus_per_node, args):
 
 
 def train(train_loader, model, criterion, optimizer, epoch, args):
+    print("Entered training...")
     batch_time = AverageMeter('Time', ':6.3f')
     data_time = AverageMeter('Data', ':6.3f')
     losses = AverageMeter('Loss', ':.4e')
