@@ -115,7 +115,7 @@ def main():
 def main_worker(gpu, ngpus_per_node, args):
     global best_acc1
     args.gpu = gpu
-
+    print("Entered main worker...")
     if args.gpu is not None:
         print("Use GPU: {} for training".format(args.gpu))
 
